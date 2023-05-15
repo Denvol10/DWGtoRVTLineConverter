@@ -11,9 +11,9 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using RevitWPFTemplate.Infrastructure;
+using DWGtoRVTLineConverter.Infrastructure;
 
-namespace RevitWPFTemplate.ViewModels
+namespace DWGtoRVTLineConverter.ViewModels
 {
     internal class MainWindowViewModel : Base.ViewModel
     {
