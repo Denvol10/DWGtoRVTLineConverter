@@ -28,14 +28,20 @@ namespace DWGtoRVTLineConverter
             Doc = uiapp.ActiveUIDocument.Document;
         }
 
-        public List<string> GetAllRooms()
+        public List<string> GetAllPolyLines()
         {
-            var rooms = new FilteredElementCollector(Doc).OfCategory(BuiltInCategory.OST_Rooms)
-                                                          .Cast<Room>()
-                                                          .Select(r => r.Name)
-                                                          .ToList();
+            Selection sel = Uiapp.ActiveUIDocument.Selection;
+            Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
+            Element elem = Doc.GetElement(picked);
 
-            return rooms;
+            Options options = new Options();
+            var geometry = elem.get_Geometry(options);
+            var geomInstance = geometry.OfType<GeometryInstance>().First();
+            var lines = geomInstance.GetInstanceGeometry().OfType<PolyLine>();
+
+            var lineHashCode = lines.Select(l => l.Id.ToString()).ToList();
+
+            return lineHashCode;
         }
 
         public string GetDWGFileName()

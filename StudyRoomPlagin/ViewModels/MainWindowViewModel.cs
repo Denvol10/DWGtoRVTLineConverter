@@ -49,30 +49,32 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #endregion
 
-        #region Список комнат
+        #region Список линий
 
-        private ObservableCollection<string> _rooms;
+        private ObservableCollection<string> _lines;
 
-        public ObservableCollection<string> Rooms
+        public ObservableCollection<string> Lines
         {
-            get => _rooms;
-            set => Set(ref _rooms, value);
+            get => _lines;
+            set => Set(ref _lines, value);
         }
 
         #endregion
 
         #region Команды
 
-        #region Команда получение всех комнат
+        #region Команда получение всех линий
 
-        public ICommand GetRoomsCommand { get; }
+        public ICommand GetPolyLines { get; }
 
-        private void OnGetRoomsCommandExecuted(object parameter)
+        private void OnGetPolyLinesCommandExecuted(object parameter)
         {
-            Rooms = new ObservableCollection<string>(RevitModel.GetAllRooms());
+            RevitCommand.mainView.Hide();
+            Lines = new ObservableCollection<string>(RevitModel.GetAllPolyLines());
+            RevitCommand.mainView.ShowDialog();
         }
 
-        private bool CanGetRoomsCommandExecute(object parameter)
+        private bool CanGetPolyLinesCommandExecute(object parameter)
         {
             return true;
         }
@@ -105,7 +107,7 @@ namespace DWGtoRVTLineConverter.ViewModels
         {
             #region Команды
 
-            GetRoomsCommand = new LambdaCommand(OnGetRoomsCommandExecuted, CanGetRoomsCommandExecute);
+            GetPolyLines = new LambdaCommand(OnGetPolyLinesCommandExecuted, CanGetPolyLinesCommandExecute);
 
             GetDWGName = new LambdaCommand(OnGetDWGNameExecuted, CanGetDWGNameExecute);
 

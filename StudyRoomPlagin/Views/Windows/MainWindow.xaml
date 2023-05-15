@@ -12,7 +12,7 @@
     <Window.InputBindings>
         <KeyBinding Modifiers="Ctrl"
                     Key="P"
-                    Command="{Binding GetRoomsCommand}" />
+                    Command="{Binding GetPolyLines}" />
     </Window.InputBindings>
     <Window.DataContext>
         <vm:MainWindowViewModel />
@@ -27,19 +27,19 @@
                  x:Name="AllRoomsView"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
-                 ItemsSource="{Binding Rooms}" />
+                 ItemsSource="{Binding Lines}" />
         <GridSplitter Grid.Column="1"
                       ShowsPreview="False"
                       Width="3"
                       HorizontalAlignment="Center"
                       VerticalAlignment="Stretch" />
         <StackPanel Grid.Column="2">
-            <Button Content="Получить комнаты"
+            <Button Content="Получить линии"
                     Width="120"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
                     Margin="10,10,0,0"
-                    Command="{Binding GetRoomsCommand}" />
+                    Command="{Binding GetPolyLines}" />
             <Button Content="Получить имя файла"
                     Width="120"
                     HorizontalAlignment="Left"
