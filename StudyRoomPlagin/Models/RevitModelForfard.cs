@@ -15,27 +15,37 @@ namespace DWGtoRVTLineConverter
 {
     public class RevitModelForfard
     {
-        private UIApplication _uiapp = null;
-        private Application _app = null;
-        private UIDocument _uidoc = null;
-        private Document _doc = null;
+        private UIApplication Uiapp { get; set; } = null;
+        private Application App { get; set; } = null;
+        private UIDocument Uidoc { get; set; } = null;
+        private Document Doc { get; set; } = null;
 
         public RevitModelForfard(UIApplication uiapp)
         {
-            _uiapp = uiapp;
-            _app = uiapp.Application;
-            _uidoc = uiapp.ActiveUIDocument;
-            _doc = uiapp.ActiveUIDocument.Document;
+            Uiapp = uiapp;
+            App = uiapp.Application;
+            Uidoc = uiapp.ActiveUIDocument;
+            Doc = uiapp.ActiveUIDocument.Document;
         }
 
         public List<string> GetAllRooms()
         {
-            var rooms = new FilteredElementCollector(_doc).OfCategory(BuiltInCategory.OST_Rooms)
+            var rooms = new FilteredElementCollector(Doc).OfCategory(BuiltInCategory.OST_Rooms)
                                                           .Cast<Room>()
                                                           .Select(r => r.Name)
                                                           .ToList();
 
             return rooms;
+        }
+
+        public string GetDWGFileName()
+        {
+            Selection sel = Uiapp.ActiveUIDocument.Selection;
+            Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
+            Element elem = Doc.GetElement(picked);
+            var param = elem.get_Parameter(BuiltInParameter.IMPORT_SYMBOL_NAME);
+
+            return param.AsString();
         }
     }
 }

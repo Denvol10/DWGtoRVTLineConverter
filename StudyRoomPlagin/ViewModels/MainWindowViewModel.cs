@@ -27,12 +27,24 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #region Заголовок
 
-        private string _title = "Комнаты";
+        private string _title = "DWG to RVT";
 
         public string Title
         {
             get => _title;
             set => Set(ref _title, value);
+        }
+
+        #endregion
+
+        #region Имя DWG файла
+
+        private string _dwgFileName;
+
+        public string DwgFileName
+        {
+            get => _dwgFileName;
+            set => Set(ref _dwgFileName, value);
         }
 
         #endregion
@@ -67,15 +79,35 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #endregion
 
+        #region Получение имени DWG файла
+
+        public ICommand GetDWGName { get; }
+
+        private void OnGetDWGNameExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            DwgFileName = RevitModel.GetDWGFileName();
+            RevitCommand.mainView.ShowDialog();
+        }
+
+        private bool CanGetDWGNameExecute(object parameter)
+        {
+            return true;
+        }
+
+        #endregion
+
         #endregion
 
 
         #region Конструктор класса MainWindowViewModel
         public MainWindowViewModel()
         {
-            #region
+            #region Команды
 
             GetRoomsCommand = new LambdaCommand(OnGetRoomsCommandExecuted, CanGetRoomsCommandExecute);
+
+            GetDWGName = new LambdaCommand(OnGetDWGNameExecuted, CanGetDWGNameExecute);
 
             #endregion
         }

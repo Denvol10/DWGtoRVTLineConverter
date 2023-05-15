@@ -17,6 +17,8 @@ namespace DWGtoRVTLineConverter.Infrastructure
     [Regeneration(RegenerationOption.Manual)]
     internal class RevitCommand : IExternalCommand
     {
+        public static MainWindow mainView = null;
+
         public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
         {
             UIApplication uiapp = commandData.Application;
@@ -38,10 +40,9 @@ namespace DWGtoRVTLineConverter.Infrastructure
 
                     view.DataContext = mainWindowViewModel;
 
-                    if (view.ShowDialog() != true)
-                    {
-                        return Result.Cancelled;
-                    }
+                    mainView = view;
+
+                    view.ShowDialog();
                 }
 
                 return Result.Succeeded;
