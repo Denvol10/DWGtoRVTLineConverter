@@ -27,7 +27,7 @@
                  x:Name="AllRoomsView"
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
-                 ItemsSource="{Binding Lines}" />
+                 ItemsSource="{Binding LinesName}" />
         <GridSplitter Grid.Column="1"
                       ShowsPreview="False"
                       Width="3"
@@ -45,11 +45,16 @@
                     HorizontalAlignment="Left"
                     Margin="10,10,0,0"
                     Command="{Binding GetDWGName}" />
-            <TextBox Width="150" 
+            <TextBox Width="150"
                      HorizontalAlignment="Left"
                      Margin="10,10,0,0"
                      Text="{Binding DwgFileName, Mode=OneWay}"
-                     IsReadOnly="True"/>
+                     IsReadOnly="True" />
+            <Button Content="Экспорт линий"
+                    Width="150" 
+                    HorizontalAlignment="Left"
+                    Margin="10,10,0,0"
+                    Command="{Binding ExportLinesToJson}"/>
         </StackPanel>
     </Grid>
 </Window>

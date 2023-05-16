@@ -12,6 +12,7 @@ using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using DWGtoRVTLineConverter.Infrastructure;
+using DWGtoRVTLineConverter.Models;
 
 namespace DWGtoRVTLineConverter.ViewModels
 {
@@ -51,13 +52,26 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #region Список линий
 
-        private ObservableCollection<string> _lines;
+        private ObservableCollection<string> _linesname;
 
-        public ObservableCollection<string> Lines
+        public ObservableCollection<string> LinesName
+        {
+            get => _linesname;
+            set => Set(ref _linesname, value);
+        }
+
+        #endregion
+
+        #region Полилинии
+
+        private List<PolylineUtils> _lines;
+
+        public List<PolylineUtils> Lines
         {
             get => _lines;
             set => Set(ref _lines, value);
         }
+
 
         #endregion
 
@@ -70,11 +84,31 @@ namespace DWGtoRVTLineConverter.ViewModels
         private void OnGetPolyLinesCommandExecuted(object parameter)
         {
             RevitCommand.mainView.Hide();
-            Lines = new ObservableCollection<string>(RevitModel.GetAllPolyLines());
+            LinesName = new ObservableCollection<string>(RevitModel.GetAllPolyLinesName());
             RevitCommand.mainView.ShowDialog();
         }
 
         private bool CanGetPolyLinesCommandExecute(object parameter)
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region Экспорт линий в Json файл
+
+        public ICommand ExportLinesToJson { get; }
+
+        private void OnExportLinesToJsonCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            Lines = new List<PolylineUtils>(RevitModel.GetAllPolyLines());
+            RevitModel.ExportPolyLines(Lines);
+            RevitCommand.mainView.ShowDialog();
+
+        }
+
+        private bool CanExportLinesToJsonCommandExecute(object parameter)
         {
             return true;
         }
@@ -110,6 +144,8 @@ namespace DWGtoRVTLineConverter.ViewModels
             GetPolyLines = new LambdaCommand(OnGetPolyLinesCommandExecuted, CanGetPolyLinesCommandExecute);
 
             GetDWGName = new LambdaCommand(OnGetDWGNameExecuted, CanGetDWGNameExecute);
+
+            ExportLinesToJson = new LambdaCommand(OnExportLinesToJsonCommandExecuted, CanExportLinesToJsonCommandExecute);
 
             #endregion
         }

@@ -10,6 +10,10 @@ using Autodesk.Revit.UI;
 using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
+using Microsoft.Win32;
+using System.Text.Json;
+using System.IO;
+using DWGtoRVTLineConverter.Models;
 
 namespace DWGtoRVTLineConverter
 {
@@ -28,7 +32,7 @@ namespace DWGtoRVTLineConverter
             Doc = uiapp.ActiveUIDocument.Document;
         }
 
-        public List<string> GetAllPolyLines()
+        public List<string> GetAllPolyLinesName()
         {
             Selection sel = Uiapp.ActiveUIDocument.Selection;
             Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
@@ -52,6 +56,34 @@ namespace DWGtoRVTLineConverter
             var param = elem.get_Parameter(BuiltInParameter.IMPORT_SYMBOL_NAME);
 
             return param.AsString();
+        }
+
+        public List<PolylineUtils> GetAllPolyLines()
+        {
+            Selection sel = Uiapp.ActiveUIDocument.Selection;
+            Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
+            Element elem = Doc.GetElement(picked);
+
+            Options options = new Options();
+            var geometry = elem.get_Geometry(options);
+            var geomInstance = geometry.OfType<GeometryInstance>().First();
+            var lines = geomInstance.GetInstanceGeometry().OfType<PolyLine>().ToList();
+            var lineUtils = lines.Select(l => new PolylineUtils(l)).ToList();
+
+            return lineUtils;
+        }
+
+        public void ExportPolyLines(IEnumerable<PolylineUtils> lines)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json files (*.json)|*.json";
+
+            if(saveFileDialog.ShowDialog() == true)
+            {
+                string filename = saveFileDialog.FileName;
+                string jsonString = JsonSerializer.Serialize(lines);
+                File.WriteAllText(filename, jsonString);
+            }
         }
     }
 }
