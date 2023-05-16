@@ -19,5 +19,12 @@ namespace DWGtoRVTLineConverter.Models
             Y = point.Y;
             Z = point.Z;
         }
+
+        public PointUtils(double x, double y, double z)
+        {
+            X = x;
+            Y = y;
+            Z = z;
+        }
     }
 }

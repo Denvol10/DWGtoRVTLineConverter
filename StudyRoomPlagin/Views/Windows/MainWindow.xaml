@@ -51,10 +51,15 @@
                      Text="{Binding DwgFileName, Mode=OneWay}"
                      IsReadOnly="True" />
             <Button Content="Экспорт линий"
-                    Width="150" 
+                    Width="160"
                     HorizontalAlignment="Left"
                     Margin="10,10,0,0"
-                    Command="{Binding ExportLinesToJson}"/>
+                    Command="{Binding ExportLinesToJson}" />
+            <Button Content="Создать точки в семействе" 
+                    Width="160"
+                    HorizontalAlignment="Left"
+                    Margin="10,10,0,0"
+                    Command="{Binding CreatePointsFromJson}"/>
         </StackPanel>
     </Grid>
 </Window>

@@ -58,7 +58,7 @@ namespace DWGtoRVTLineConverter
             return param.AsString();
         }
 
-        public List<PolylineUtils> GetAllPolyLines()
+        public List<PolylineUtils> GetAllPolyLinesFromDWG()
         {
             Selection sel = Uiapp.ActiveUIDocument.Selection;
             Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
@@ -73,7 +73,7 @@ namespace DWGtoRVTLineConverter
             return lineUtils;
         }
 
-        public void ExportPolyLines(IEnumerable<PolylineUtils> lines)
+        public void ExportPolyLines(List<PolylineUtils> lines)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Json files (*.json)|*.json";
@@ -81,9 +81,46 @@ namespace DWGtoRVTLineConverter
             if(saveFileDialog.ShowDialog() == true)
             {
                 string filename = saveFileDialog.FileName;
+
                 string jsonString = JsonSerializer.Serialize(lines);
                 File.WriteAllText(filename, jsonString);
             }
+        }
+
+        public IEnumerable<PolylineUtils> ImportPolyLinesfromJson()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Json files (*.json)|*.json";
+
+            if(openFileDialog.ShowDialog() == true)
+            {
+                string fileName = openFileDialog.FileName;
+                string jsonString = File.ReadAllText(fileName);
+                var lines = JsonSerializer.Deserialize<List<PolylineUtils>>(jsonString);
+
+                return lines;
+            }
+
+            return null;
+        }
+
+        public void CreateAdaptivePoints(PolylineUtils line)
+        {
+            using(Transaction trans = new Transaction(Doc, "Create Points"))
+            {
+                trans.Start();
+                foreach(var point in line.GetPoints())
+                {
+                    XYZ xyzPoint = new XYZ(point.X, point.Y, point.Z);
+                    Doc.FamilyCreate.NewReferencePoint(xyzPoint);
+                }
+                trans.Commit();
+            }
+        }
+
+        public bool IsFamily()
+        {
+            return Doc.IsFamilyDocument;
         }
     }
 }

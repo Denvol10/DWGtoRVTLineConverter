@@ -102,13 +102,34 @@ namespace DWGtoRVTLineConverter.ViewModels
         private void OnExportLinesToJsonCommandExecuted(object parameter)
         {
             RevitCommand.mainView.Hide();
-            Lines = new List<PolylineUtils>(RevitModel.GetAllPolyLines());
+            Lines = new List<PolylineUtils>(RevitModel.GetAllPolyLinesFromDWG());
             RevitModel.ExportPolyLines(Lines);
             RevitCommand.mainView.ShowDialog();
 
         }
 
         private bool CanExportLinesToJsonCommandExecute(object parameter)
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region Импорт точек из полилиний из Json файла
+
+        public ICommand CreatePointsFromJson { get; }
+
+        private void OnCreatePointsFromJsonCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            Lines = new List<PolylineUtils>(RevitModel.ImportPolyLinesfromJson());
+            foreach(var line in Lines)
+            {
+                RevitModel.CreateAdaptivePoints(line);
+            }
+        }
+
+        private bool CanCreatePointsFromJsonCommandExecute(object parameter)
         {
             return true;
         }
@@ -146,6 +167,8 @@ namespace DWGtoRVTLineConverter.ViewModels
             GetDWGName = new LambdaCommand(OnGetDWGNameExecuted, CanGetDWGNameExecute);
 
             ExportLinesToJson = new LambdaCommand(OnExportLinesToJsonCommandExecuted, CanExportLinesToJsonCommandExecute);
+
+            CreatePointsFromJson = new LambdaCommand(OnCreatePointsFromJsonCommandExecuted, CanCreatePointsFromJsonCommandExecute);
 
             #endregion
         }
