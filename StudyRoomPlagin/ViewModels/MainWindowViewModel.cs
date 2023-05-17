@@ -103,8 +103,10 @@ namespace DWGtoRVTLineConverter.ViewModels
         private void OnExportLinesToJsonCommandExecuted(object parameter)
         {
             RevitCommand.mainView.Hide();
-            Lines = new List<PolylineUtils>(RevitModel.GetAllPolyLinesFromDWG());
+            string fileName = string.Empty;
+            Lines = new List<PolylineUtils>(RevitModel.GetAllPolyLinesFromDWG(ref fileName));
             RevitModel.ExportPolyLines(Lines);
+            DwgFileName = fileName;
             RevitCommand.mainView.ShowDialog();
 
         }

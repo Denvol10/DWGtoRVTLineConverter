@@ -7,64 +7,35 @@
         xmlns:local="clr-namespace:DWGtoRVTLineConverter"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="450"
-        Width="800">
-    <Window.InputBindings>
-        <KeyBinding Modifiers="Ctrl"
-                    Key="P"
-                    Command="{Binding GetPolyLines}" />
-    </Window.InputBindings>
+        Height="200"
+        Width="300"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="1*" />
-        </Grid.ColumnDefinitions>
-        <ListBox Grid.Column="0"
-                 x:Name="AllRoomsView"
-                 HorizontalAlignment="Stretch"
-                 VerticalAlignment="Stretch"
-                 ItemsSource="{Binding LinesName}" />
-        <GridSplitter Grid.Column="1"
-                      ShowsPreview="False"
-                      Width="3"
-                      HorizontalAlignment="Center"
-                      VerticalAlignment="Stretch" />
-        <StackPanel Grid.Column="2">
-            <Button Content="Получить линии"
-                    Width="120"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Bottom"
-                    Margin="10,10,0,0"
-                    Command="{Binding GetPolyLines}" />
-            <Button Content="Получить имя файла"
-                    Width="120"
+        <StackPanel>
+            <Button Content="Экспорт линий в файл"
+                    Width="160"
+                    Height="25"
                     HorizontalAlignment="Left"
                     Margin="10,10,0,0"
-                    Command="{Binding GetDWGName}" />
-            <TextBox Width="150"
+                    Command="{Binding ExportLinesToJson}" />
+            <TextBlock Width="240"
+                       HorizontalAlignment="Left"
+                       Margin="10,10,0,0"
+                       Text="Линии экспортированны из DWG файла:" />
+            <TextBox Width="240"
                      HorizontalAlignment="Left"
                      Margin="10,10,0,0"
                      Text="{Binding DwgFileName, Mode=OneWay}"
                      IsReadOnly="True" />
-            <Button Content="Экспорт линий"
-                    Width="160"
-                    HorizontalAlignment="Left"
-                    Margin="10,10,0,0"
-                    Command="{Binding ExportLinesToJson}" />
-            <Button Content="Создать точки в семействе" 
-                    Width="160"
-                    HorizontalAlignment="Left"
-                    Margin="10,10,0,0"
-                    Command="{Binding CreatePointsFromJson}"/>
             <Button Content="Создать линии в семействе"
                     Width="160"
+                    Height="25"
                     HorizontalAlignment="Left"
                     Margin="10,10,0,0"
-                    Command="{Binding CreateLinesInFamily}"/>
+                    Command="{Binding CreateLinesInFamily}" />
         </StackPanel>
     </Grid>
 </Window>

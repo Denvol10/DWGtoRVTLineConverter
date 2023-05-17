@@ -58,11 +58,12 @@ namespace DWGtoRVTLineConverter
             return param.AsString();
         }
 
-        public List<PolylineUtils> GetAllPolyLinesFromDWG()
+        public List<PolylineUtils> GetAllPolyLinesFromDWG(ref string dwgName)
         {
             Selection sel = Uiapp.ActiveUIDocument.Selection;
             Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
             Element elem = Doc.GetElement(picked);
+            dwgName = elem.get_Parameter(BuiltInParameter.IMPORT_SYMBOL_NAME).AsString();
 
             Options options = new Options();
             var geometry = elem.get_Geometry(options);
