@@ -54,7 +54,8 @@
                         Width="160"
                         Height="25"
                         HorizontalAlignment="Center"
-                        Margin="10,10,0,0" />
+                        Margin="10,10,0,0" 
+                        Command="{Binding CreateDirectShapeLines}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

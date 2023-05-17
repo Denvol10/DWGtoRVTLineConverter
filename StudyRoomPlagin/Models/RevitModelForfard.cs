@@ -114,5 +114,31 @@ namespace DWGtoRVTLineConverter
                 trans.Commit();
             }
         }
+
+        public void CreateDirectShapeLinesInModel()
+        {
+            Selection sel = Uiapp.ActiveUIDocument.Selection;
+            Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
+            Element elem = Doc.GetElement(picked);
+
+            Options options = new Options();
+            var geometry = elem.get_Geometry(options);
+            var geomInstance = geometry.OfType<GeometryInstance>().First();
+            var lines = geomInstance.GetInstanceGeometry().OfType<PolyLine>().ToList();
+
+            ElementId categoryId = new ElementId(BuiltInCategory.OST_Lines);
+
+            foreach(var line in lines)
+            {
+                using (Transaction trans = new Transaction(Doc, "Create Polyline"))
+                {
+                    trans.Start();
+                    DirectShape directShape = DirectShape.CreateElement(Doc, categoryId);
+                    var lineList = new List<GeometryObject>() { line };
+                    directShape.SetShape(lineList);
+                    trans.Commit();
+                }
+            }
+        }
     }
 }

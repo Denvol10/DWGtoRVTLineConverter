@@ -90,14 +90,31 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         public ICommand CreateLinesInFamily { get; }
 
-        public void OnCreateLinesInFamilyCommandExecuted(object parameter)
+        private void OnCreateLinesInFamilyCommandExecuted(object parameter)
         {
             RevitCommand.mainView.Hide();
             Lines = new List<PolylineUtils>(RevitModel.ImportPolyLinesfromJson());
             RevitModel.CreatePolylinesInFamily(Lines);
         }
 
-        public bool CanCreateLinesInFamilyCommandExecute(object parameter)
+        private bool CanCreateLinesInFamilyCommandExecute(object parameter)
+        {
+            return true;
+        }
+
+        #endregion
+
+        #region Создание линий внутри проекта
+
+        public ICommand CreateDirectShapeLines { get; }
+
+        private void OnCreateDirectShapeLinesCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            RevitModel.CreateDirectShapeLinesInModel();
+        }
+
+        private bool CanCreateDirectShapeLinesCommandExecute(object parameter)
         {
             return true;
         }
@@ -115,6 +132,8 @@ namespace DWGtoRVTLineConverter.ViewModels
             ExportLinesToJson = new LambdaCommand(OnExportLinesToJsonCommandExecuted, CanExportLinesToJsonCommandExecute);
 
             CreateLinesInFamily = new LambdaCommand(OnCreateLinesInFamilyCommandExecuted, CanCreateLinesInFamilyCommandExecute);
+
+            CreateDirectShapeLines = new LambdaCommand(OnCreateDirectShapeLinesCommandExecuted, CanCreateDirectShapeLinesCommandExecute);
 
             #endregion
         }

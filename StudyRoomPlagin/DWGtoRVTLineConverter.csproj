@@ -83,6 +83,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationRevit.cs" />
     <Compile Include="Infrastructure\Base\Command.cs" />
     <Compile Include="Infrastructure\LambdaCommand.cs" />
     <Compile Include="Infrastructure\RevitCommand.cs" />
