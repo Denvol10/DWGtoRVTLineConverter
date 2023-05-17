@@ -7,35 +7,55 @@
         xmlns:local="clr-namespace:DWGtoRVTLineConverter"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="200"
+        Height="250"
         Width="300"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
     <Grid>
-        <StackPanel>
-            <Button Content="Экспорт линий в файл"
-                    Width="160"
-                    Height="25"
-                    HorizontalAlignment="Left"
-                    Margin="10,10,0,0"
-                    Command="{Binding ExportLinesToJson}" />
-            <TextBlock Width="240"
-                       HorizontalAlignment="Left"
-                       Margin="10,10,0,0"
-                       Text="Линии экспортированны из DWG файла:" />
-            <TextBox Width="240"
-                     HorizontalAlignment="Left"
-                     Margin="10,10,0,0"
-                     Text="{Binding DwgFileName, Mode=OneWay}"
-                     IsReadOnly="True" />
-            <Button Content="Создать линии в семействе"
-                    Width="160"
-                    Height="25"
-                    HorizontalAlignment="Left"
-                    Margin="10,10,0,0"
-                    Command="{Binding CreateLinesInFamily}" />
-        </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="1.2*" />
+        </Grid.RowDefinitions>
+        <GroupBox Grid.Row="0"
+                  Header="Экспорт линий в семейство">
+            <StackPanel>
+                <Button Content="Экспорт линий в файл"
+                        Width="160"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        Margin="10,10,0,0"
+                        Command="{Binding ExportLinesToJson}"
+                        MinHeight="25" />
+                <TextBlock Width="240"
+                           HorizontalAlignment="Center"
+                           Margin="10,10,0,0"
+                           Text="Линии экспортированны из DWG файла:" />
+                <TextBox Width="240"
+                         HorizontalAlignment="Center"
+                         Margin="10,10,0,0"
+                         Text="{Binding DwgFileName, Mode=OneWay}"
+                         IsReadOnly="True" />
+                <Button Content="Создать линии в семействе"
+                        Width="160"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        Margin="10,10,0,0"
+                        Command="{Binding CreateLinesInFamily}"
+                        VerticalAlignment="Top"
+                        MinHeight="25" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Grid.Row="1"
+                  Header="Создание линий в проекте">
+            <StackPanel>
+                <Button Content="Создать линии в проекте"
+                        Width="160"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        Margin="10,10,0,0" />
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>
