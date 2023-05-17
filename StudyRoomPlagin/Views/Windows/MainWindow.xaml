@@ -60,6 +60,11 @@
                     HorizontalAlignment="Left"
                     Margin="10,10,0,0"
                     Command="{Binding CreatePointsFromJson}"/>
+            <Button Content="Создать линии в семействе"
+                    Width="160"
+                    HorizontalAlignment="Left"
+                    Margin="10,10,0,0"
+                    Command="{Binding CreateLinesInFamily}"/>
         </StackPanel>
     </Grid>
 </Window>

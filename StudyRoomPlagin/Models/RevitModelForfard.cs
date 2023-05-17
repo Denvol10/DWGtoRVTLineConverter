@@ -118,9 +118,40 @@ namespace DWGtoRVTLineConverter
             }
         }
 
-        public bool IsFamily()
+        public void CreatePolylinesInFamily(IEnumerable<PolylineUtils> lines)
         {
-            return Doc.IsFamilyDocument;
+            using(Transaction trans = new Transaction(Doc, "Polylines Created"))
+            {
+                trans.Start();
+
+                foreach(var line in lines)
+                {
+                    var referencePoints = new ReferencePointArray();
+
+                    foreach (var point in line.GetPoints())
+                    {
+                        XYZ xyzPoint = new XYZ(point.X, point.Y, point.Z);
+                        var referencePoint = Doc.FamilyCreate.NewReferencePoint(xyzPoint);
+                        referencePoints.Append(referencePoint);
+                    }
+
+                    var pointPairs = new List<ReferencePointArray>();
+                    for (int i = 0; i < referencePoints.Size - 1; i++)
+                    {
+                        var poinArray = new ReferencePointArray();
+                        poinArray.Append(referencePoints.get_Item(i));
+                        poinArray.Append(referencePoints.get_Item(i + 1));
+                        pointPairs.Add(poinArray);
+                    }
+
+                    foreach (var points in pointPairs)
+                    {
+                        Doc.FamilyCreate.NewCurveByPoints(points);
+                    }
+                }
+
+                trans.Commit();
+            }
         }
     }
 }

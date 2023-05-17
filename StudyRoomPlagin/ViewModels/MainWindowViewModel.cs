@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Input;
 using DWGtoRVTLineConverter.Infrastructure;
 using DWGtoRVTLineConverter.Models;
+using System.Windows.Shapes;
 
 namespace DWGtoRVTLineConverter.ViewModels
 {
@@ -136,6 +137,24 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #endregion
 
+        #region Создание линий в семействе
+
+        public ICommand CreateLinesInFamily { get; }
+
+        public void OnCreateLinesInFamilyCommandExecuted(object parameter)
+        {
+            RevitCommand.mainView.Hide();
+            Lines = new List<PolylineUtils>(RevitModel.ImportPolyLinesfromJson());
+            RevitModel.CreatePolylinesInFamily(Lines);
+        }
+
+        public bool CanCreateLinesInFamilyCommandExecute(object parameter)
+        {
+            return true;
+        }
+
+        #endregion
+
         #region Получение имени DWG файла
 
         public ICommand GetDWGName { get; }
@@ -169,6 +188,8 @@ namespace DWGtoRVTLineConverter.ViewModels
             ExportLinesToJson = new LambdaCommand(OnExportLinesToJsonCommandExecuted, CanExportLinesToJsonCommandExecute);
 
             CreatePointsFromJson = new LambdaCommand(OnCreatePointsFromJsonCommandExecuted, CanCreatePointsFromJsonCommandExecute);
+
+            CreateLinesInFamily = new LambdaCommand(OnCreateLinesInFamilyCommandExecuted, CanCreateLinesInFamilyCommandExecute);
 
             #endregion
         }
