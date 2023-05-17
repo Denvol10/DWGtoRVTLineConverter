@@ -51,18 +51,6 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #endregion
 
-        #region Список линий
-
-        private ObservableCollection<string> _linesname;
-
-        public ObservableCollection<string> LinesName
-        {
-            get => _linesname;
-            set => Set(ref _linesname, value);
-        }
-
-        #endregion
-
         #region Полилинии
 
         private List<PolylineUtils> _lines;
@@ -73,28 +61,9 @@ namespace DWGtoRVTLineConverter.ViewModels
             set => Set(ref _lines, value);
         }
 
-
         #endregion
 
         #region Команды
-
-        #region Команда получение всех линий
-
-        public ICommand GetPolyLines { get; }
-
-        private void OnGetPolyLinesCommandExecuted(object parameter)
-        {
-            RevitCommand.mainView.Hide();
-            LinesName = new ObservableCollection<string>(RevitModel.GetAllPolyLinesName());
-            RevitCommand.mainView.ShowDialog();
-        }
-
-        private bool CanGetPolyLinesCommandExecute(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
 
         #region Экспорт линий в Json файл
 
@@ -108,31 +77,9 @@ namespace DWGtoRVTLineConverter.ViewModels
             RevitModel.ExportPolyLines(Lines);
             DwgFileName = fileName;
             RevitCommand.mainView.ShowDialog();
-
         }
 
         private bool CanExportLinesToJsonCommandExecute(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
-
-        #region Импорт точек из полилиний из Json файла
-
-        public ICommand CreatePointsFromJson { get; }
-
-        private void OnCreatePointsFromJsonCommandExecuted(object parameter)
-        {
-            RevitCommand.mainView.Hide();
-            Lines = new List<PolylineUtils>(RevitModel.ImportPolyLinesfromJson());
-            foreach(var line in Lines)
-            {
-                RevitModel.CreateAdaptivePoints(line);
-            }
-        }
-
-        private bool CanCreatePointsFromJsonCommandExecute(object parameter)
         {
             return true;
         }
@@ -157,24 +104,6 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #endregion
 
-        #region Получение имени DWG файла
-
-        public ICommand GetDWGName { get; }
-
-        private void OnGetDWGNameExecuted(object parameter)
-        {
-            RevitCommand.mainView.Hide();
-            DwgFileName = RevitModel.GetDWGFileName();
-            RevitCommand.mainView.ShowDialog();
-        }
-
-        private bool CanGetDWGNameExecute(object parameter)
-        {
-            return true;
-        }
-
-        #endregion
-
         #endregion
 
 
@@ -183,13 +112,7 @@ namespace DWGtoRVTLineConverter.ViewModels
         {
             #region Команды
 
-            GetPolyLines = new LambdaCommand(OnGetPolyLinesCommandExecuted, CanGetPolyLinesCommandExecute);
-
-            GetDWGName = new LambdaCommand(OnGetDWGNameExecuted, CanGetDWGNameExecute);
-
             ExportLinesToJson = new LambdaCommand(OnExportLinesToJsonCommandExecuted, CanExportLinesToJsonCommandExecute);
-
-            CreatePointsFromJson = new LambdaCommand(OnCreatePointsFromJsonCommandExecuted, CanCreatePointsFromJsonCommandExecute);
 
             CreateLinesInFamily = new LambdaCommand(OnCreateLinesInFamilyCommandExecuted, CanCreateLinesInFamilyCommandExecute);
 

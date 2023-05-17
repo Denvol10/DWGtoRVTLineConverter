@@ -32,32 +32,6 @@ namespace DWGtoRVTLineConverter
             Doc = uiapp.ActiveUIDocument.Document;
         }
 
-        public List<string> GetAllPolyLinesName()
-        {
-            Selection sel = Uiapp.ActiveUIDocument.Selection;
-            Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
-            Element elem = Doc.GetElement(picked);
-
-            Options options = new Options();
-            var geometry = elem.get_Geometry(options);
-            var geomInstance = geometry.OfType<GeometryInstance>().First();
-            var lines = geomInstance.GetInstanceGeometry().OfType<PolyLine>();
-
-            var lineHashCode = lines.Select(l => l.Id.ToString()).ToList();
-
-            return lineHashCode;
-        }
-
-        public string GetDWGFileName()
-        {
-            Selection sel = Uiapp.ActiveUIDocument.Selection;
-            Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
-            Element elem = Doc.GetElement(picked);
-            var param = elem.get_Parameter(BuiltInParameter.IMPORT_SYMBOL_NAME);
-
-            return param.AsString();
-        }
-
         public List<PolylineUtils> GetAllPolyLinesFromDWG(ref string dwgName)
         {
             Selection sel = Uiapp.ActiveUIDocument.Selection;
@@ -103,20 +77,6 @@ namespace DWGtoRVTLineConverter
             }
 
             return null;
-        }
-
-        public void CreateAdaptivePoints(PolylineUtils line)
-        {
-            using(Transaction trans = new Transaction(Doc, "Create Points"))
-            {
-                trans.Start();
-                foreach(var point in line.GetPoints())
-                {
-                    XYZ xyzPoint = new XYZ(point.X, point.Y, point.Z);
-                    Doc.FamilyCreate.NewReferencePoint(xyzPoint);
-                }
-                trans.Commit();
-            }
         }
 
         public void CreatePolylinesInFamily(IEnumerable<PolylineUtils> lines)
