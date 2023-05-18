@@ -28,8 +28,10 @@ namespace DWGtoRVTLineConverter
                                                            assemblyLocation,
                                                            typeof(RevitCommand).FullName)
             {
-                LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "dwgToRVT_icon.png"))
+                LargeImage = new BitmapImage(new Uri(iconsDirectoryPath + "dwgToRVT_icon.png")),
+                LongDescription = "Команда для получения линий из вставленного DWG файла"
             };
+
 
             panel.AddItem(buttonData);
 
