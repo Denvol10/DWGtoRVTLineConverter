@@ -11,9 +11,9 @@ using Autodesk.Revit.UI.Selection;
 using Autodesk.Revit.DB.Architecture;
 using System.Collections.ObjectModel;
 using Microsoft.Win32;
-using System.Text.Json;
 using System.IO;
 using DWGtoRVTLineConverter.Models;
+using Newtonsoft.Json;
 
 namespace DWGtoRVTLineConverter
 {
@@ -57,7 +57,7 @@ namespace DWGtoRVTLineConverter
             {
                 string filename = saveFileDialog.FileName;
 
-                string jsonString = JsonSerializer.Serialize(lines);
+                string jsonString = JsonConvert.SerializeObject(lines, Formatting.Indented);
                 File.WriteAllText(filename, jsonString);
             }
         }
@@ -71,7 +71,7 @@ namespace DWGtoRVTLineConverter
             {
                 string fileName = openFileDialog.FileName;
                 string jsonString = File.ReadAllText(fileName);
-                var lines = JsonSerializer.Deserialize<List<PolylineUtils>>(jsonString);
+                var lines = JsonConvert.DeserializeObject<List<PolylineUtils>>(jsonString);
 
                 return lines;
             }
