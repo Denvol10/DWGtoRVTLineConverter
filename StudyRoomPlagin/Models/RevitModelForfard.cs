@@ -124,18 +124,27 @@ namespace DWGtoRVTLineConverter
             Options options = new Options();
             var geometry = elem.get_Geometry(options);
             var geomInstance = geometry.OfType<GeometryInstance>().First();
-            var lines = geomInstance.GetInstanceGeometry().OfType<PolyLine>().ToList();
+            var allcurves = new List<GeometryObject>();
 
+            var polylines = geomInstance.GetInstanceGeometry().OfType<PolyLine>().ToList();
+            var curves = geomInstance.GetInstanceGeometry().OfType<Curve>().ToList();
+
+            allcurves.AddRange(polylines);
+            allcurves.AddRange(curves);
+            
             ElementId categoryId = new ElementId(BuiltInCategory.OST_Lines);
 
-            foreach(var line in lines)
+            foreach(var line in allcurves)
             {
-                using (Transaction trans = new Transaction(Doc, "Create Polyline"))
+                using (Transaction trans = new Transaction(Doc, "Create Curve"))
                 {
                     trans.Start();
-                    DirectShape directShape = DirectShape.CreateElement(Doc, categoryId);
                     var lineList = new List<GeometryObject>() { line };
-                    directShape.SetShape(lineList);
+                    DirectShape directShape = DirectShape.CreateElement(Doc, categoryId);
+                    if(directShape.IsValidShape(lineList))
+                    {
+                        directShape.SetShape(lineList);
+                    }
                     trans.Commit();
                 }
             }
