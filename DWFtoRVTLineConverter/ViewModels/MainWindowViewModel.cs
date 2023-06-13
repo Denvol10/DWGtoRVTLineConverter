@@ -125,8 +125,10 @@ namespace DWGtoRVTLineConverter.ViewModels
 
 
         #region Конструктор класса MainWindowViewModel
-        public MainWindowViewModel()
+        public MainWindowViewModel(RevitModelForfard revitModel)
         {
+            RevitModel = revitModel;
+
             #region Команды
 
             ExportLinesToJson = new LambdaCommand(OnExportLinesToJsonCommandExecuted, CanExportLinesToJsonCommandExecute);
@@ -137,6 +139,8 @@ namespace DWGtoRVTLineConverter.ViewModels
 
             #endregion
         }
+
+        public MainWindowViewModel() { }
         #endregion
     }
 }

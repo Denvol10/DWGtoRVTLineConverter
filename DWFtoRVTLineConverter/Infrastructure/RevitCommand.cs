@@ -28,8 +28,8 @@ namespace DWGtoRVTLineConverter.Infrastructure
 
             try
             {
-                MainWindowViewModel mainWindowViewModel = new MainWindowViewModel();
-                mainWindowViewModel.RevitModel = new RevitModelForfard(uiapp);
+                var RevitModel = new RevitModelForfard(uiapp);
+                MainWindowViewModel mainWindowViewModel = new MainWindowViewModel(RevitModel);
 
                 System.Diagnostics.Process proc = System.Diagnostics.Process.GetCurrentProcess();
 
