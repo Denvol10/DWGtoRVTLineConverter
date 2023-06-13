@@ -14,6 +14,8 @@ using Microsoft.Win32;
 using System.IO;
 using DWGtoRVTLineConverter.Models;
 using Newtonsoft.Json;
+using System.Reflection;
+using System.Configuration.Assemblies;
 
 namespace DWGtoRVTLineConverter
 {
@@ -152,9 +154,14 @@ namespace DWGtoRVTLineConverter
 
         public void SaveCurvesInFamilyFile()
         {
-            var libraryPath = App.GetLibraryPaths().Values.First();
-            string sourceDirectory = Path.GetFullPath(Path.Combine(libraryPath, @"..\..\"));
-            string templatePath = Path.Combine(sourceDirectory, @"Family Templates\Russian\Метрическая система, адаптивная типовая модель.rft");
+            string assemblyPath = typeof(RevitModelForfard).Assembly.Location;
+            string assemblyFolder = Path.GetDirectoryName(assemblyPath);
+            string assemblyName = "DWGtoRVTLineConverter";
+
+            string dataPath = Path.Combine(assemblyFolder, assemblyName + "_data");
+            string textPath = Path.Combine(dataPath, "templatePath" + ".txt");
+            string[] text = File.ReadAllLines(textPath);
+            string templatePath = text[0];
 
             Selection sel = Uiapp.ActiveUIDocument.Selection;
             Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
