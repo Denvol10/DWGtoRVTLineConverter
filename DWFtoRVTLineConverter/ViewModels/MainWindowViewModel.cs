@@ -121,6 +121,20 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #endregion
 
+        #region Сохранение линий в семейство
+        public ICommand SaveCurvesInFamilyCommand { get; }
+
+        private void OnSaveCurvesInFamilyCommandExecuted(object parameter)
+        {
+            RevitModel.SaveCurvesInFamilyFile();
+        }
+
+        private bool CanSaveCurvesInFamilyCommandExecute(object parameter)
+        {
+            return true;
+        }
+        #endregion
+
         #endregion
 
 
@@ -134,6 +148,8 @@ namespace DWGtoRVTLineConverter.ViewModels
             ExportLinesToJson = new LambdaCommand(OnExportLinesToJsonCommandExecuted, CanExportLinesToJsonCommandExecute);
 
             CreateLinesInFamily = new LambdaCommand(OnCreateLinesInFamilyCommandExecuted, CanCreateLinesInFamilyCommandExecute);
+
+            SaveCurvesInFamilyCommand = new LambdaCommand(OnSaveCurvesInFamilyCommandExecuted, CanSaveCurvesInFamilyCommandExecute);
 
             CreateDirectShapeLines = new LambdaCommand(OnCreateDirectShapeLinesCommandExecuted, CanCreateDirectShapeLinesCommandExecute);
 

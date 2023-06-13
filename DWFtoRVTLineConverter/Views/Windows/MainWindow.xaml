@@ -7,7 +7,7 @@
         xmlns:local="clr-namespace:DWGtoRVTLineConverter"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="250"
+        Height="350"
         Width="300"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
@@ -43,6 +43,14 @@
                         HorizontalAlignment="Center"
                         Margin="10,10,0,0"
                         Command="{Binding CreateLinesInFamily}"
+                        VerticalAlignment="Top"
+                        MinHeight="25" />
+                <Button Content="Сохранить линии в проекте"
+                        Width="160"
+                        Height="25"
+                        HorizontalAlignment="Center"
+                        Margin="10,20,0,0"
+                        Command="{Binding SaveCurvesInFamilyCommand}"
                         VerticalAlignment="Top"
                         MinHeight="25" />
             </StackPanel>

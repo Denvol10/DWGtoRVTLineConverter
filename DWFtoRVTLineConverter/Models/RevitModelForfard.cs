@@ -149,5 +149,13 @@ namespace DWGtoRVTLineConverter
                 }
             }
         }
+
+        public void SaveCurvesInFamilyFile()
+        {
+            string templatePath = @"C:\ProgramData\Autodesk\RVT 2021\Family Templates\Russian\Метрическая система, адаптивная типовая модель.rft";
+            string filePath = @"O:\Revit Infrastructure Tools\Test\TestLineFamily.rfa";
+            Document familyDocument = App.NewFamilyDocument(templatePath);
+            familyDocument.SaveAs(filePath);
+        }
     }
 }
