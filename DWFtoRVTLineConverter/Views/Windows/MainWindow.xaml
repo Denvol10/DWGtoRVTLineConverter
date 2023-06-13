@@ -7,64 +7,104 @@
         xmlns:local="clr-namespace:DWGtoRVTLineConverter"
         mc:Ignorable="d"
         Title="{Binding Title}"
-        Height="350"
+        Height="319"
         Width="300"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Background="#f0f0f0">
     <Window.DataContext>
         <vm:MainWindowViewModel />
     </Window.DataContext>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="1.2*" />
-        </Grid.RowDefinitions>
-        <GroupBox Grid.Row="0"
-                  Header="Экспорт линий в семейство">
+    <Window.Resources>
+        <Style x:Key="TextAboveButton"
+               TargetType="TextBlock">
+            <Setter Property="Height"
+                    Value="15" />
+            <Setter Property="TextAlignment"
+                    Value="Center" />
+            <Setter Property="Margin"
+                    Value="0,5,0,0" />
+        </Style>
+        <Style x:Key="SelectButton"
+               TargetType="Button">
+            <Setter Property="Width"
+                    Value="100" />
+            <Setter Property="Height"
+                    Value="22" />
+            <Setter Property="Content"
+                    Value="Выбрать" />
+            <Setter Property="Background"
+                    Value="#fdfdfd" />
+            <Setter Property="Margin"
+                    Value="0,5,0,0" />
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
+            <Style.Resources>
+                <Style TargetType="Border">
+                    <Setter Property="CornerRadius"
+                            Value="4" />
+                </Style>
+            </Style.Resources>
+        </Style>
+        <Style x:Key="SelectedItemsBox"
+               TargetType="TextBox">
+            <Setter Property="IsReadOnly"
+                    Value="True" />
+            <Setter Property="TextWrapping"
+                    Value="Wrap" />
+            <Setter Property="Width"
+                    Value="240" />
+            <Setter Property="Height"
+                    Value="20" />
+            <Setter Property="VerticalAlignment"
+                    Value="Bottom" />
+        </Style>
+        <Style x:Key="BorderGroupStyle"
+               TargetType="GroupBox">
+            <Setter Property="BorderBrush"
+                    Value="#818181" />
+            <Setter Property="BorderThickness"
+                    Value="0.5" />
+            <Setter Property="Margin"
+                    Value="2,0,3,0" />
+        </Style>
+    </Window.Resources>
+    <StackPanel>
+        <GroupBox Header="Создание линий"
+                  Style="{StaticResource BorderGroupStyle}">
             <StackPanel>
-                <Button Content="Экспорт линий в файл"
-                        Width="160"
-                        Height="25"
-                        HorizontalAlignment="Center"
-                        Margin="10,10,0,0"
+                <TextBlock Text="Создать линии в семействе"
+                           Style="{StaticResource TextAboveButton}" />
+                <Button Content="Создать"
+                        Style="{StaticResource SelectButton}"
+                        Command="{Binding SaveCurvesInFamilyCommand}" />
+                <TextBlock Text="Создать линии в файле проекта"
+                           Style="{StaticResource TextAboveButton}" />
+                <Button Content="Создать"
+                        Style="{StaticResource SelectButton}"
+                        Command="{Binding CreateDirectShapeLines}" />
+            </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Создание линий внешним файлом"
+                  Style="{StaticResource BorderGroupStyle}">
+            <StackPanel>
+                <TextBlock Text="Сохранить линии в json файл"
+                           Style="{StaticResource TextAboveButton}" />
+                <Button Content="Сохранить"
                         Command="{Binding ExportLinesToJson}"
-                        MinHeight="25" />
-                <TextBlock Width="240"
-                           HorizontalAlignment="Center"
-                           Margin="10,10,0,0"
-                           Text="Линии экспортированны из DWG файла:" />
-                <TextBox Width="240"
-                         HorizontalAlignment="Center"
-                         Margin="10,10,0,0"
+                        Style="{StaticResource SelectButton}" />
+                <TextBlock Text="Линии экспортированны из dwg файла:"
+                           Style="{StaticResource TextAboveButton}" />
+                <TextBox Style="{StaticResource SelectedItemsBox}"
+                         Margin="0,5,0,0"
                          Text="{Binding DwgFileName, Mode=OneWay}"
                          IsReadOnly="True" />
-                <Button Content="Создать линии в семействе"
-                        Width="160"
-                        Height="25"
-                        HorizontalAlignment="Center"
-                        Margin="10,10,0,0"
-                        Command="{Binding CreateLinesInFamily}"
-                        VerticalAlignment="Top"
-                        MinHeight="25" />
-                <Button Content="Сохранить линии в проекте"
-                        Width="160"
-                        Height="25"
-                        HorizontalAlignment="Center"
-                        Margin="10,20,0,0"
-                        Command="{Binding SaveCurvesInFamilyCommand}"
-                        VerticalAlignment="Top"
-                        MinHeight="25" />
+                <TextBlock Text="Создать линии в семействе из json файла"
+                           Style="{StaticResource TextAboveButton}" />
+                <Button Content="Создать"
+                        Style="{StaticResource SelectButton}"
+                        Command="{Binding CreateLinesInFamily}" />
             </StackPanel>
         </GroupBox>
-        <GroupBox Grid.Row="1"
-                  Header="Создание линий в проекте">
-            <StackPanel>
-                <Button Content="Создать линии в проекте"
-                        Width="160"
-                        Height="25"
-                        HorizontalAlignment="Center"
-                        Margin="10,10,0,0" 
-                        Command="{Binding CreateDirectShapeLines}"/>
-            </StackPanel>
-        </GroupBox>
-    </Grid>
+    </StackPanel>
 </Window>

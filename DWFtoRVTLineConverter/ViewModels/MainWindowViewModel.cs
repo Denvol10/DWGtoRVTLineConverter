@@ -29,7 +29,7 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         #region Заголовок
 
-        private string _title = "DWG to RVT";
+        private string _title = "DWG в RVT";
 
         public string Title
         {
@@ -95,6 +95,7 @@ namespace DWGtoRVTLineConverter.ViewModels
             RevitCommand.mainView.Hide();
             Lines = new List<PolylineUtils>(RevitModel.ImportPolyLinesfromJson());
             RevitModel.CreatePolylinesInFamily(Lines);
+            RevitCommand.mainView.Close();
         }
 
         private bool CanCreateLinesInFamilyCommandExecute(object parameter)
@@ -112,6 +113,7 @@ namespace DWGtoRVTLineConverter.ViewModels
         {
             RevitCommand.mainView.Hide();
             RevitModel.CreateDirectShapeLinesInModel();
+            RevitCommand.mainView.Close();
         }
 
         private bool CanCreateDirectShapeLinesCommandExecute(object parameter)
@@ -128,7 +130,7 @@ namespace DWGtoRVTLineConverter.ViewModels
         {
             RevitCommand.mainView.Hide();
             RevitModel.SaveCurvesInFamilyFile();
-            RevitCommand.mainView.ShowDialog();
+            RevitCommand.mainView.Close();
         }
 
         private bool CanSaveCurvesInFamilyCommandExecute(object parameter)

@@ -152,8 +152,9 @@ namespace DWGtoRVTLineConverter
 
         public void SaveCurvesInFamilyFile()
         {
-            string templatePath = @"C:\ProgramData\Autodesk\RVT 2021\Family Templates\Russian\Метрическая система, адаптивная типовая модель.rft";
-
+            var libraryPath = App.GetLibraryPaths().Values.First();
+            string sourceDirectory = Path.GetFullPath(Path.Combine(libraryPath, @"..\..\"));
+            string templatePath = Path.Combine(sourceDirectory, @"Family Templates\Russian\Метрическая система, адаптивная типовая модель.rft");
 
             Selection sel = Uiapp.ActiveUIDocument.Selection;
             Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
@@ -191,11 +192,14 @@ namespace DWGtoRVTLineConverter
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Файлы семейств (*.rfa)|*.rfa";
+            SaveAsOptions saveOptions = new SaveAsOptions();
+            saveOptions.OverwriteExistingFile = true;
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 string filePath = saveFileDialog.FileName;
-                familyDocument.SaveAs(filePath);
+                familyDocument.SaveAs(filePath, saveOptions);
+                familyDocument.Close(false);
             }
         }
     }
