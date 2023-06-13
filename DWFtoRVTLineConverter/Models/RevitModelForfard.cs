@@ -53,7 +53,7 @@ namespace DWGtoRVTLineConverter
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Json files (*.json)|*.json";
 
-            if(saveFileDialog.ShowDialog() == true)
+            if (saveFileDialog.ShowDialog() == true)
             {
                 string filename = saveFileDialog.FileName;
 
@@ -67,7 +67,7 @@ namespace DWGtoRVTLineConverter
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Json files (*.json)|*.json";
 
-            if(openFileDialog.ShowDialog() == true)
+            if (openFileDialog.ShowDialog() == true)
             {
                 string fileName = openFileDialog.FileName;
                 string jsonString = File.ReadAllText(fileName);
@@ -81,11 +81,11 @@ namespace DWGtoRVTLineConverter
 
         public void CreatePolylinesInFamily(IEnumerable<PolylineUtils> lines)
         {
-            using(Transaction trans = new Transaction(Doc, "Polylines Created"))
+            using (Transaction trans = new Transaction(Doc, "Polylines Created"))
             {
                 trans.Start();
 
-                foreach(var line in lines)
+                foreach (var line in lines)
                 {
                     var referencePoints = new ReferencePointArray();
 
@@ -131,17 +131,17 @@ namespace DWGtoRVTLineConverter
 
             allcurves.AddRange(polylines);
             allcurves.AddRange(curves);
-            
+
             ElementId categoryId = new ElementId(BuiltInCategory.OST_Lines);
 
-            foreach(var line in allcurves)
+            foreach (var line in allcurves)
             {
                 using (Transaction trans = new Transaction(Doc, "Create Curve"))
                 {
                     trans.Start();
                     var lineList = new List<GeometryObject>() { line };
                     DirectShape directShape = DirectShape.CreateElement(Doc, categoryId);
-                    if(directShape.IsValidShape(lineList))
+                    if (directShape.IsValidShape(lineList))
                     {
                         directShape.SetShape(lineList);
                     }
@@ -153,9 +153,16 @@ namespace DWGtoRVTLineConverter
         public void SaveCurvesInFamilyFile()
         {
             string templatePath = @"C:\ProgramData\Autodesk\RVT 2021\Family Templates\Russian\Метрическая система, адаптивная типовая модель.rft";
-            string filePath = @"O:\Revit Infrastructure Tools\Test\TestLineFamily.rfa";
-            Document familyDocument = App.NewFamilyDocument(templatePath);
-            familyDocument.SaveAs(filePath);
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Файлы семейств (*.rfa)|*.rfa";
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+                Document familyDocument = App.NewFamilyDocument(templatePath);
+                familyDocument.SaveAs(filePath);
+            }
         }
     }
 }
