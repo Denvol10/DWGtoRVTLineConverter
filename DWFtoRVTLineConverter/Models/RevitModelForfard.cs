@@ -154,13 +154,47 @@ namespace DWGtoRVTLineConverter
         {
             string templatePath = @"C:\ProgramData\Autodesk\RVT 2021\Family Templates\Russian\Метрическая система, адаптивная типовая модель.rft";
 
+
+            Selection sel = Uiapp.ActiveUIDocument.Selection;
+            Reference picked = sel.PickObject(ObjectType.Element, "Select DWG File");
+            Element elem = Doc.GetElement(picked);
+
+            Options options = new Options();
+            var geometry = elem.get_Geometry(options);
+            var geomInstance = geometry.OfType<GeometryInstance>().First();
+            var allcurves = new List<GeometryObject>();
+
+            var polylines = geomInstance.GetInstanceGeometry().OfType<PolyLine>().ToList();
+            var curves = geomInstance.GetInstanceGeometry().OfType<Curve>().ToList();
+
+            allcurves.AddRange(polylines);
+            allcurves.AddRange(curves);
+
+            ElementId categoryId = new ElementId(BuiltInCategory.OST_Lines);
+
+            Document familyDocument = App.NewFamilyDocument(templatePath);
+
+            using (Transaction trans = new Transaction(familyDocument, "Create Curves"))
+            {
+                trans.Start();
+                foreach (var line in allcurves)
+                {
+                    var lineList = new List<GeometryObject>() { line };
+                    DirectShape directShape = DirectShape.CreateElement(familyDocument, categoryId);
+                    if (directShape.IsValidShape(lineList))
+                    {
+                        directShape.SetShape(lineList);
+                    }
+                }
+                trans.Commit();
+            }
+
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Файлы семейств (*.rfa)|*.rfa";
 
             if (saveFileDialog.ShowDialog() == true)
             {
                 string filePath = saveFileDialog.FileName;
-                Document familyDocument = App.NewFamilyDocument(templatePath);
                 familyDocument.SaveAs(filePath);
             }
         }

@@ -126,7 +126,9 @@ namespace DWGtoRVTLineConverter.ViewModels
 
         private void OnSaveCurvesInFamilyCommandExecuted(object parameter)
         {
+            RevitCommand.mainView.Hide();
             RevitModel.SaveCurvesInFamilyFile();
+            RevitCommand.mainView.ShowDialog();
         }
 
         private bool CanSaveCurvesInFamilyCommandExecute(object parameter)
