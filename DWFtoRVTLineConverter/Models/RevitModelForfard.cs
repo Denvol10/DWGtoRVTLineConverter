@@ -152,7 +152,7 @@ namespace DWGtoRVTLineConverter
             }
         }
 
-        public void SaveCurvesInFamilyFile()
+        public void SaveCurvesInFamilyFile(bool isOpenFamilyInApplication)
         {
             string assemblyPath = typeof(RevitModelForfard).Assembly.Location;
             string assemblyFolder = Path.GetDirectoryName(assemblyPath);
@@ -206,7 +206,14 @@ namespace DWGtoRVTLineConverter
             {
                 string filePath = saveFileDialog.FileName;
                 familyDocument.SaveAs(filePath, saveOptions);
-                familyDocument.Close(false);
+                if (isOpenFamilyInApplication)
+                {
+                    Uiapp.OpenAndActivateDocument(filePath);
+                }
+                else
+                {
+                    familyDocument.Close(false);
+                }
             }
         }
     }

@@ -52,7 +52,6 @@ namespace DWGtoRVTLineConverter.ViewModels
         #endregion
 
         #region Полилинии
-
         private List<PolylineUtils> _lines;
 
         public List<PolylineUtils> Lines
@@ -60,7 +59,15 @@ namespace DWGtoRVTLineConverter.ViewModels
             get => _lines;
             set => Set(ref _lines, value);
         }
+        #endregion
 
+        #region Открыть созданный файл семейства с линиями
+        private bool _isOpenFamilyInApplication;
+        public bool IsOpenFamilyInApplication
+        {
+            get => _isOpenFamilyInApplication;
+            set => Set(ref _isOpenFamilyInApplication, value);
+        }
         #endregion
 
         #region Команды
@@ -129,7 +136,7 @@ namespace DWGtoRVTLineConverter.ViewModels
         private void OnSaveCurvesInFamilyCommandExecuted(object parameter)
         {
             RevitCommand.mainView.Hide();
-            RevitModel.SaveCurvesInFamilyFile();
+            RevitModel.SaveCurvesInFamilyFile(IsOpenFamilyInApplication);
             RevitCommand.mainView.Close();
         }
 
